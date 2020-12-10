@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Build and tag docker image
-      run: |
-        docker build . --file Dockerfile -t ${{ env.CONTAINER_IMAGE }}
     - uses: azure/docker-login@v1
       with:
         login-server: openhackz6y6y8p2acr.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build . -t openhackz6y6y8p2acr.azurecr.io/poiimage:${{ github.sha }}
+        docker push openhackz6y6y8p2acr.azurecr.io/poiimage:${{ github.sha }}
