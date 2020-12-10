@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 3.1.*
     - run: |
-        cd apis/poi
+        cd apis/poi/
     - name: Install dependencies
       run: dotnet restore
     - name: Build
