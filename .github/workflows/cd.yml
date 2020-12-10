@@ -1,0 +1,18 @@
+name: Publish from master
+env:
+  CONTAINER_IMAGE: poi-image
+on:
+  push: 
+    branches: [master, feature_1.0]
+defaults:
+  run:
+    shell: bash
+    working-directory: apis/poi 
+jobs:
+  publish-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build and tag docker image
+      run: |
+        docker build . --file ./web/Dockerfile -t ${{ env.CONTAINER_IMAGE }}
