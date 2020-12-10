@@ -27,7 +27,6 @@ jobs:
       run: dotnet restore
     - name: Build
       run: |
-        cd ../user-java
         dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
