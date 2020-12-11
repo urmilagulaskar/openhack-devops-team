@@ -37,7 +37,16 @@ jobs:
       with:
         app-name: ${{ env.webapp_name }}
         slot-name: staging 
-        images: openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }}         
+        images: openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }}
+    - name: Validate Staging WebApp Sanity
+      id: validate
+      run: |
+        if [[ `curl http://iopenhackz6y6y8p2poi-staging.azurewebsites.net/api/healthcheck/poi` ]]
+        then
+          echo "Sanity Passed"
+        else
+          echo "Sanity Failed"
+        fi        
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
