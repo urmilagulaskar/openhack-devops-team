@@ -26,6 +26,10 @@ jobs:
     - run: |
         docker build . -t openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }}
         docker push openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }}
+    - name: Azure CLI Start Staging Slot
+      uses: Azure/cli@1.0.4
+      with:
+        inlineScript: az webapp start --name openhackz6y6y8p2poi --resource-group openhackz6y6y8p2rg --slot staging
     - run: |
         az webapp config container set --docker-custom-image-name openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }} --docker-registry-server-password ${{ secrets.REGISTRY_PASSWORD }} --docker-registry-server-url https://openhackz6y6y8p2acr.azurecr.io --docker-registry-server-user ${{ secrets.REGISTRY_USERNAME }} --name 'openhackz6y6y8p2poi-staging'​​​​​​​ --resource-group 'openhackz6y6y8p2rg' --subscription '3c082e7f-fb81-4f67-a531-6ec569abe076'
                     
