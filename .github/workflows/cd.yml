@@ -11,7 +11,13 @@ jobs:
   publish-docker-image:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: 'Checkout Github Action'
+      uses: actions/checkout@master
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
     - uses: azure/docker-login@v1
       with:
         login-server: openhackz6y6y8p2acr.azurecr.io
