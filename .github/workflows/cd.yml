@@ -48,7 +48,7 @@ jobs:
           echo "STATUS=Sanity Failed" >> $GITHUB_ENV
         fi
     - name: Swap Slots
-      if: contains($STATUS, 'Sanity Passed')
+      if: contains( {{ env.STATUS }}, 'Sanity Passed')
       run: |
         az webapp deployment slot swap  -g openhackz6y6y8p2rg -n ${{ env.webapp_name }} --slot staging --target-slot production
         echo "Slots Swapped"
