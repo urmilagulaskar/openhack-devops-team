@@ -41,9 +41,10 @@ jobs:
     - name: Validate Staging WebApp Sanity
       id: validate
       run: |
-        if [[ `curl http://iopenhackz6y6y8p2poi-staging.azurewebsites.net/api/healthcheck/poi` ]]
+        if [[ `curl http://openhackz6y6y8p2poi-staging.azurewebsites.net/api/healthcheck/poi` ]]
         then
           echo "Sanity Passed"
+          echo {{ steps.validate.outcome }}
         else
           echo "Sanity Failed"
         fi        
