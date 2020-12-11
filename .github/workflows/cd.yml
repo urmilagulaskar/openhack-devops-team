@@ -53,10 +53,20 @@ jobs:
         then
           az webapp deployment slot swap  -g openhackz6y6y8p2rg -n ${{ env.webapp_name }} --slot staging --target-slot production
           echo "Slots Swapped"
-          curl https://openhackz6y6y8p2poi.azurewebsites.net/api/healthcheck/poi > /dev/null;if [ $? -eq 0 ];then echo "Passed"; else echo "Failed"; fi
         else
           echo "Sanity Failed and so not swapping Slots"
         fi
+    - name: Rollback
+      run: |
+        curl https://openhackz6y6y8p2poi.azurewebsites.net/api/healthcheck/poi > /dev/null
+        if [ $? -eq 0 ]
+        then
+          echo "Passed"
+        else
+          echo "Failed"
+          az webapp deployment slot swap  -g openhackz6y6y8p2rg -n ${{ env.webapp_name }} --slot production --target-slot staging
+        fi
+    
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
@@ -69,3 +79,4 @@ jobs:
             title: "${{ env.build_name }} Workflow ${{ github.run_number }} Failed! ",
             body: body
             });
+          az webapp deployment slot delete  -g openhackz6y6y8p2rg -n ${{ env.webapp_name }} --slot staging 
