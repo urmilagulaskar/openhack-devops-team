@@ -27,8 +27,8 @@ jobs:
         docker build . -t openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }}
         docker push openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }}
     - run: |
-        az webapp config container set --docker-custom-image-name openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }} --docker-registry-server-password ${{ secrets.REGISTRY_PASSWORD }} --docker-registry-server-url https://openhackz6y6y8p2acr.azurecr.io --docker-registry-server-user ${{ secrets.REGISTRY_USERNAME }} --name 'openhackz6y6y8p2poi'​​​​​​​ --resource-group '/subscriptions/3c082e7f-fb81-4f67-a531-6ec569abe076/resourceGroups/openhackz6y6y8p2rg/providers/Microsoft.Web/sites/openhackz6y6y8p2poi' --subscription '3c082e7f-fb81-4f67-a531-6ec569abe076'
-            
+        az webapp config container set --docker-custom-image-name openhackz6y6y8p2acr.azurecr.io/app-poi:${{ github.sha }} --docker-registry-server-password ${{ secrets.REGISTRY_PASSWORD }} --docker-registry-server-url https://openhackz6y6y8p2acr.azurecr.io --docker-registry-server-user ${{ secrets.REGISTRY_USERNAME }} --name 'openhackz6y6y8p2poi-staging'​​​​​​​ --resource-group 'openhackz6y6y8p2rg' --subscription '3c082e7f-fb81-4f67-a531-6ec569abe076'
+                    
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
