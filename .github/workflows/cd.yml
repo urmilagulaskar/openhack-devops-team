@@ -56,17 +56,11 @@ jobs:
         else
           echo "Sanity Failed and so not swapping Slots"
         fi
-    - name: Rollback
+    - name: Rollback -Swap production and staging
+      if: failure()
       run: |
-        curl https://openhackz6y6y8p2poi.azurewebsites.net/api/healthcheck/poi > /dev/null
-        if [ $? -eq 0 ]
-        then
-          echo "Passed"
-        else
-          echo "Failed"
-          az webapp deployment slot swap  -g openhackz6y6y8p2rg -n ${{ env.webapp_name }} --slot production --target-slot staging
-        fi
-    
+        az webapp deployment slot swap --name ${{ env.webapp_name }} --resource-group openhackz6y6y8p2rg --slot staging --target-slot production
+         
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
@@ -80,3 +74,10 @@ jobs:
             body: body
             });
           az webapp deployment slot delete  -g openhackz6y6y8p2rg -n ${{ env.webapp_name }} --slot staging 
+  stop_staging_slot:
+    needs: [publish-docker-image]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stop staging
+        run: |
+          az webapp stop --name openhackz6y6y8p2poi --resource-group openhackz6y6y8p2rg --slot staging
