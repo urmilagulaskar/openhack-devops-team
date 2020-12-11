@@ -78,6 +78,10 @@ jobs:
     needs: [publish-docker-image]
     runs-on: ubuntu-latest
     steps:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
       - name: Stop staging
         run: |
           az webapp stop --name openhackz6y6y8p2poi --resource-group openhackz6y6y8p2rg --slot staging
