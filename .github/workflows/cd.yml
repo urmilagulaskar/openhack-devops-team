@@ -43,11 +43,16 @@ jobs:
       run: |
         if [[ `curl http://openhackz6y6y8p2poi-staging.azurewebsites.net/api/healthcheck/poi` ]]
         then
-          echo "Sanity Passed"
-          echo {{ steps.validate.outcome }}
+          echo "STATUS=Sanity Passed" >> $GITHUB_ENV
         else
-          echo "Sanity Failed"
-        fi        
+          echo "STATUS=Sanity Failed" >> $GITHUB_ENV
+        fi
+    - name: Swap Slots
+      if: contains($STATUS, 'Sanity Passed')
+      run: |
+        az webapp deployment slot swap  -g openhackz6y6y8p2rg -n ${{ env.webapp_name }} --slot staging --target-slot production
+        echo "Slots Swapped"
+        curl https://openhackz6y6y8p2poi.azurewebsites.net/api/healthcheck/poi > /dev/null;if [ $? -eq 0 ];then echo "Passed"; else echo "Failed"; fi
     - uses: actions/github-script@0.9.0
       if: failure()
       with:
